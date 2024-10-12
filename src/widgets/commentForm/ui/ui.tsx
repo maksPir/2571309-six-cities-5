@@ -1,5 +1,5 @@
 
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import { ReviewType } from '../../../shared/api';
 
 
@@ -11,6 +11,14 @@ const ratingData = [5,4,3,2,1];
 
 export default function CommentForm() {
   const [reviewState, setReviewState] = useState<ReviewType>(initialState);
+  const [isValid, setIsValid] = useState<boolean>(false);
+  useEffect(()=>{
+    if((reviewState.comment.length < 50 || reviewState.comment.length > 300 || reviewState.rating === 0) && isValid) {
+      setIsValid(false);
+    } else if (reviewState.comment.length >= 50 && reviewState.comment.length <= 300 && reviewState.rating !== 0 && !isValid) {
+      setIsValid(true);
+    }
+  },[reviewState]);
   return (
     <form className="reviews__form form" action="#" method="post">
       <label className="reviews__label form__label" htmlFor="review">
@@ -66,7 +74,7 @@ export default function CommentForm() {
         <button
           className="reviews__submit form__submit button"
           type="submit"
-          disabled={false}
+          disabled={!isValid}
           onClick={(e)=>{
             e.preventDefault();
             setReviewState(initialState);
