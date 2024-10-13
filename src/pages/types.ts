@@ -33,17 +33,13 @@ export const publicRoutes: IRoute[] = [
   {
     path: routesEnum.NOT_FOUND,
     Component: NotFoundPage,
-  },
-  {
-    path: routesEnum.FAVORITES,
-    Component: FavoritesPage,
   }
 ];
 
 export const privateRoutes: IRoute[] = [
-  // {
-  //   path: routesEnum.FAVORITES,
-  //   Component: FavoritesPage,
-  // }
+  {
+    path: routesEnum.FAVORITES,
+    Component: FavoritesPage,
+  }
 ];
 
