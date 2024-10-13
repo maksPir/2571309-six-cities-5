@@ -13,8 +13,8 @@ export default function OffersList({offersMockData}: IOffersListProps) {
     setActiveOffer(id);
   };
   return (
-    <div className="cities__places-list places__list tabs__content" onMouseLeave={()=>setActiveOffer('')}>
-      {offersMockData.map((el) => (<CardOffer offer = {el} key={el.id} onMouseEnterCallback={onActiveOfferChangeCallback}/>))}
+    <div className="cities__places-list places__list tabs__content">
+      {offersMockData.map((el) => (<CardOffer block={'cities'} offer = {el} key={el.id} onMouseMoveCallback={onActiveOfferChangeCallback}/>))}
     </div>
   );
 }

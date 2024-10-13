@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
-import { FavoriteCard } from '../components/favoriteCard';
 import { OfferType } from '../shared/interface';
 import { Link } from 'react-router-dom';
+import { CardOffer } from '../components';
 
 interface IFavoritesPageProps {
   offersMockData: OfferType[];
@@ -76,7 +76,7 @@ export default function FavoritesPage({offersMockData}: IFavoritesPageProps) {
                     </div>
                   </div>
                   <div className="favorites__places">
-                    {el[1].map((elem) =>(<FavoriteCard offer={elem} key={elem.id}/>))}
+                    {el[1].map((elem) =>(<CardOffer block='favorites' offer={elem} key={elem.id}/>))}
 
                   </div>
                 </li>)

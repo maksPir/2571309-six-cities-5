@@ -8,7 +8,6 @@ import OfferPage from './OfferPage';
 
 interface IRoute {
   path: routesEnum;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   Component: ElementType;
 }
 export enum routesEnum {

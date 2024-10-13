@@ -1,5 +1,5 @@
 
-import {useEffect, useState} from 'react';
+import {Fragment, useEffect, useState} from 'react';
 import { ReviewType } from '../../../shared/api';
 
 
@@ -7,7 +7,22 @@ const initialState: ReviewType = {
   comment: '',
   rating: 0
 };
-const ratingData = [5,4,3,2,1];
+const ratingData = [
+  {
+    value:5,
+    title: 'perfect'},
+  {
+    value:4,
+    title: 'good'},
+  {
+    value:3,
+    title: 'not bad'},
+  {
+    value:2,
+    title: 'badly'},
+  {
+    value:1,
+    title: 'terribly'}];
 
 export default function CommentForm() {
   const [reviewState, setReviewState] = useState<ReviewType>(initialState);
@@ -27,30 +42,28 @@ export default function CommentForm() {
       <div className="reviews__rating-form form__rating">
         {
           ratingData.map((el)=>(
-            <>
+            <Fragment key={el.value}>
               <input
                 className="form__rating-input visually-hidden"
                 name="rating"
                 value={reviewState.rating}
-                id={`${el}-stars`}
+                id={`${el.value}-stars`}
                 type="radio"
-                checked
-                onClick={()=>{
-                  setReviewState((prev)=>({...prev, rating: el}));
+                checked={el.value === reviewState.rating}
+                onChange={()=>{
+                  setReviewState((prev)=>({...prev, rating: el.value}));
                 }}
-                key={el}
               />
               <label
-                key={`${el}_label`}
-                htmlFor={`${el}-stars`}
+                htmlFor={`${el.value}-stars`}
                 className="reviews__rating-label form__rating-label"
-                title="perfect"
+                title={el.title}
               >
-                <svg key={`${el}svg`} className="form__star-image" width={37} height={33}>
+                <svg className="form__star-image" width={37} height={33}>
                   <use xlinkHref="#icon-star" />
                 </svg>
               </label>
-            </>
+            </Fragment>
 
           ))
         }
