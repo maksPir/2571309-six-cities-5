@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { CommentForm } from '../widgets/commentForm';
+import { CommentForm } from '../widgets/comment-form';
 
 export default function OfferPage() {
   return (

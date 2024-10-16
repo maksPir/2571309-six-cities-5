@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { OfferType } from '../shared/interface';
-import { OffersList } from '../widgets/cardList';
+import { OffersList } from '../widgets/card-list';
 
 interface IMainPageProps {
   offersMockData: OfferType[];
