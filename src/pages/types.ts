@@ -41,6 +41,10 @@ export const privateRoutes: IRoute[] = [
   {
     path: routesEnum.FAVORITES,
     Component: FavoritesPage,
+  },
+  {
+    path: routesEnum.FAVORITES,
+    Component: FavoritesPage,
   }
 ];
 
