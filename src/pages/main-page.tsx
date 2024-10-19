@@ -124,7 +124,7 @@ export default function MainPage ({ offersMockData }: IMainPageProps) {
                   </li>
                 </ul>
               </form>
-              <OffersList offersMockData={offersMockData} onActiveOfferChangeCallback={onActiveOfferChangeCallback}/>
+              <OffersList block='cities' offersMockData={offersMockData} onActiveOfferChangeCallback={onActiveOfferChangeCallback}/>
             </section>
             <div className="cities__right-section">
               <section className="cities__map map">

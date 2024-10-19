@@ -1,6 +1,6 @@
 
 import {Fragment, useEffect, useState} from 'react';
-import { ReviewType } from '../../../shared/api';
+import { ReviewType } from '../../../entities/review/model/types';
 
 
 const initialState: ReviewType = {

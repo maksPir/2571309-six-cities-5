@@ -7,7 +7,7 @@ import { URL_MARKER_CURRENT, URL_MARKER_DEFAULT } from '../const';
 
 interface ICityMapProps {
     offersMockData: OfferType[];
-    selectedOfferId: string;
+    selectedOfferId?: string;
 }
 function CityMap({offersMockData, selectedOfferId}: ICityMapProps) {
   const mapRef = useRef(null);
