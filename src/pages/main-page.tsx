@@ -1,14 +1,13 @@
 import { Link } from 'react-router-dom';
-import { OfferType } from '../shared/types';
 import { OffersList } from '../widgets/card-list';
 import { CityMap } from '../widgets/city-map';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { LocationList } from '../widgets/location-list';
+import { useAppSelector } from '../shared/lib';
 
-interface IMainPageProps {
-  offersMockData: OfferType[];
-}
-
-export default function MainPage ({ offersMockData }: IMainPageProps) {
+export default function MainPage () {
+  const {city, offers} = useAppSelector((state)=>state.offer);
+  const offersMockData = useMemo(()=>offers.filter((el)=>el.city.name === city), [city]);
   const [activeOffer, setActiveOffer] = useState<string>('');
   const onActiveOfferChangeCallback = (id: string) => {
     setActiveOffer(id);
@@ -58,46 +57,13 @@ export default function MainPage ({ offersMockData }: IMainPageProps) {
       <main className="page__main page__main--index">
         <h1 className="visually-hidden">Cities</h1>
         <div className="tabs">
-          <section className="locations container">
-            <ul className="locations__list tabs__list">
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Paris</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Cologne</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Brussels</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item tabs__item--active">
-                  <span>Amsterdam</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Hamburg</span>
-                </a>
-              </li>
-              <li className="locations__item">
-                <a className="locations__item-link tabs__item" href="#">
-                  <span>Dusseldorf</span>
-                </a>
-              </li>
-            </ul>
-          </section>
+          <LocationList/>
         </div>
         <div className="cities">
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{offersMockData.length} places to stay in Amsterdam</b>
+              <b className="places__found">{offersMockData.length} places to stay in {city}</b>
               <form className="places__sorting" action="#" method="get">
                 <span className="places__sorting-caption">Sort by</span>
                 <span className="places__sorting-type" tabIndex={0}>
@@ -128,7 +94,7 @@ export default function MainPage ({ offersMockData }: IMainPageProps) {
             </section>
             <div className="cities__right-section">
               <section className="cities__map map">
-                <CityMap offersMockData={offersMockData} selectedOfferId={activeOffer}/>
+                {offersMockData.length && <CityMap offersMockData={offersMockData} selectedOfferId={activeOffer}/>}
               </section>
             </div>
           </div>

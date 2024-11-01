@@ -3,7 +3,7 @@ import {Fragment, useEffect, useState} from 'react';
 import { ReviewType } from '../../../entities/review/model/types';
 
 
-const initialState: ReviewType = {
+const initialState: Pick<ReviewType, 'comment' | 'rating'> = {
   comment: '',
   rating: 0
 };
