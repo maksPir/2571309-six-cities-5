@@ -1,5 +1,4 @@
-import { CardOffer } from '../../../components';
-import { paramsByBlockName } from '../../../components/card';
+import { CardOffer, paramsByBlockName } from '../../../entities/offer';
 import { OfferType } from '../../../shared/types';
 
 

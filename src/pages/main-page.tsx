@@ -6,14 +6,18 @@ import { LocationList } from '../widgets/location-list';
 import { useAppSelector } from '../shared/lib';
 import { routesEnum } from './types';
 import { SortingPanel } from '../features/sorting-panel';
+import { Spinner } from '../shared/ui/spinner';
 
 export default function MainPage () {
-  const {city, offers} = useAppSelector((state)=>state.offer);
+  const {city, offers,isLoading} = useAppSelector((state)=>state.offer);
   const offersMockData = useMemo(()=>offers.filter((el)=>el.city.name === city), [city, offers]);
   const [activeOffer, setActiveOffer] = useState<string>('');
   const onActiveOfferChangeCallback = (id: string) => {
     setActiveOffer(id);
   };
+  if(isLoading) {
+    return <Spinner/>;
+  }
   return (
     <div className="page page--gray page--main">
       <header className="header">
