@@ -1,12 +1,18 @@
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { CommentForm } from '../widgets/comment-form';
 import { ReviewList } from '../widgets/review-list';
 import { REVIEWS_DATA_MOCKS } from '../entities/review';
 import { CityMap } from '../widgets/city-map';
-import { OFFERS_NEIGHBOURHOOD_MOCK_DATA } from '../shared/api';
+import { OFFERS_NEIGHBOURHOOD_MOCK_DATA, OFFERS_MOCK_DATA } from '../shared/api';
 import { OffersList } from '../widgets/card-list';
+import { useMemo } from 'react';
 
 export default function OfferPage() {
+  const { id: idOffer } = useParams();
+  const mainOffer = useMemo(()=>OFFERS_MOCK_DATA.find((el)=>el.id === idOffer),[idOffer]);
+  if(!mainOffer) {
+    return null;
+  }
   return (
     <div className="page">
       <header className="header">
@@ -186,7 +192,7 @@ export default function OfferPage() {
             </div>
           </div>
           <section className="offer__map map">
-            <CityMap offersMockData={OFFERS_NEIGHBOURHOOD_MOCK_DATA}/>
+            <CityMap offersMockData={[...OFFERS_NEIGHBOURHOOD_MOCK_DATA,mainOffer]} selectedOfferId={idOffer}/>
           </section>
         </section>
         <div className="container">
@@ -199,6 +205,5 @@ export default function OfferPage() {
         </div>
       </main>
     </div>
-
   );
 }

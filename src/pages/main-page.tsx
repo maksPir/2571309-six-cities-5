@@ -9,8 +9,8 @@ interface IMainPageProps {
 }
 
 export default function MainPage ({ offersMockData }: IMainPageProps) {
-  const [activeOffer, setActiveOffer] = useState<string>('');
-  const onActiveOfferChangeCallback = (id: string) => {
+  const [activeOffer, setActiveOffer] = useState<string|null>(null);
+  const onActiveOfferChangeCallback = (id: string|null) => {
     setActiveOffer(id);
   };
   return (
