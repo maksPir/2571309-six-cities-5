@@ -3,14 +3,16 @@ import { CommentForm } from '../widgets/comment-form';
 import { ReviewList } from '../widgets/review-list';
 import { REVIEWS_DATA_MOCKS } from '../entities/review';
 import { CityMap } from '../widgets/city-map';
-import { OFFERS_NEIGHBOURHOOD_MOCK_DATA, OFFERS_MOCK_DATA } from '../shared/api';
+import { OFFERS_NEIGHBOURHOOD_MOCK_DATA} from '../shared/api';
 import { OffersList } from '../widgets/card-list';
 import { routesEnum } from './types';
 import { useMemo } from 'react';
+import { useAppSelector } from '../shared/lib';
 
 export default function OfferPage() {
   const { id: idOffer } = useParams();
-  const mainOffer = useMemo(()=>OFFERS_MOCK_DATA.find((el)=>el.id === idOffer),[idOffer]);
+  const {offers} = useAppSelector((state)=>state.offer);
+  const mainOffer = useMemo(()=>offers.find((el)=>el.id === idOffer),[idOffer,offers]);
   if(!mainOffer) {
     return null;
   }
