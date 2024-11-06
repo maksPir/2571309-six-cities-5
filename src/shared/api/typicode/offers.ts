@@ -69,27 +69,4 @@ export const OFFERS_NEIGHBOURHOOD_MOCK_DATA: OfferType[] = [
     'isFavorite': false,
     'isPremium': false,
     'rating': 1
-  },
-  {
-    'id': 'f4ca46bb-933f-46bf-8df9-3898bba03d8d',
-    'title': 'Beautiful & luxurious apartment at great location',
-    'type': 'room',
-    'price': 275,
-    'previewImage': 'https://14.design.htmlacademy.pro/static/hotel/18.jpg',
-    'city': {
-      'name': 'Paris',
-      'location': {
-        'latitude': 48.85661,
-        'longitude': 2.351499,
-        'zoom': 13
-      }
-    },
-    'location': {
-      'latitude': 48.85761,
-      'longitude': 2.358499,
-      'zoom': 16
-    },
-    'isFavorite': true,
-    'isPremium': true,
-    'rating': 3.2
   }];
