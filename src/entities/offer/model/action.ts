@@ -4,9 +4,14 @@ import { AppDispatch, RootState } from '../../../shared/lib/types';
 import { AxiosInstance } from 'axios';
 import { OfferType } from '../../../shared/types';
 import { API_ROUTES } from './config';
+import { redirectToRoute } from '../../user/model/action';
+import { routesEnum } from '../../../shared/config';
+import { fetchReviews } from '../../review/model/action';
 
 export const changeCity = createAction<string>('offer/changeCity');
 export const fillOffers = createAction<OfferType[]>('offer/fillOffers');
+export const setOfferOnPage = createAction<OfferType>('offer/setOfferOnPage');
+export const setNearOffer = createAction<OfferType[]>('offer/setNearOffer');
 export const changeSort = createAction<SortingOptionsEnum>('offer/changeSort');
 export const setOffersDataLoadingStatus = createAction<boolean>('offer/setOffersDataLoadingStatus');
 export const fetchOffers = createAsyncThunk<void, undefined,
@@ -24,4 +29,42 @@ export const fetchOffers = createAsyncThunk<void, undefined,
     dispatch(fillOffers(data));
   },
 );
+
+export const fetchNearOffersById = createAsyncThunk<void, string,
+{
+    dispatch: AppDispatch;
+    state: RootState;
+    extra: AxiosInstance;
+}>
+(
+  'offer/fetchNearOffersById',
+  async (offerId, {dispatch, extra: api}) => {
+    const {data} = await api.get<OfferType[]>(`${API_ROUTES.GET_OFFERS}/${offerId}/nearby`);
+    dispatch(setNearOffer(data?.slice(0,3)));
+  },
+);
+
+export const fetchOfferById = createAsyncThunk<void, string,
+{
+    dispatch: AppDispatch;
+    state: RootState;
+    extra: AxiosInstance;
+}>
+(
+  'offer/fetchOfferById',
+  async (offerId, {dispatch, extra: api}) => {
+    try {
+      dispatch(setOffersDataLoadingStatus(true));
+      const {data} = await api.get<OfferType>(`${API_ROUTES.GET_OFFERS}/${offerId}`);
+      dispatch(setOfferOnPage(data));
+      dispatch(fetchNearOffersById(offerId));
+      dispatch(fetchReviews(offerId));
+    } catch(e) {
+      dispatch(redirectToRoute(routesEnum.NOT_FOUND));
+    } finally {
+      dispatch(setOffersDataLoadingStatus(false));
+    }
+  },
+);
+
 

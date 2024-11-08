@@ -1,6 +1,8 @@
 
 import {Fragment, useEffect, useState} from 'react';
 import { ReviewType } from '../../../entities/review/model/types';
+import { IReviewFormProps } from './types';
+import { MAX_COMMENT_LENGTH, MIN_COMMENT_LENGTH } from './const';
 
 
 const initialState: Pick<ReviewType, 'comment' | 'rating'> = {
@@ -24,16 +26,16 @@ const ratingData = [
     value:1,
     title: 'terribly'}];
 
-export default function CommentForm() {
+export default function ReviewForm({onSubmitClick}: IReviewFormProps) {
   const [reviewState, setReviewState] = useState<Pick<ReviewType, 'comment' | 'rating'>>(initialState);
   const [isValid, setIsValid] = useState<boolean>(false);
   useEffect(()=>{
-    if((reviewState.comment.length < 50 || reviewState.comment.length > 300 || reviewState.rating === 0) && isValid) {
+    if((reviewState.comment.length < MIN_COMMENT_LENGTH || reviewState.comment.length > MAX_COMMENT_LENGTH || reviewState.rating === 0) && isValid) {
       setIsValid(false);
-    } else if (reviewState.comment.length >= 50 && reviewState.comment.length <= 300 && reviewState.rating !== 0 && !isValid) {
+    } else if (reviewState.comment.length >= MIN_COMMENT_LENGTH && reviewState.comment.length <= MAX_COMMENT_LENGTH && reviewState.rating !== 0 && !isValid) {
       setIsValid(true);
     }
-  },[reviewState]);
+  },[reviewState, isValid]);
   return (
     <form className="reviews__form form" action="#" method="post">
       <label className="reviews__label form__label" htmlFor="review">
@@ -82,7 +84,7 @@ export default function CommentForm() {
         <p className="reviews__help">
       To submit review please make sure to set{' '}
           <span className="reviews__star">rating</span> and describe your stay with
-      at least <b className="reviews__text-amount">50 characters</b>.
+      at least <b className="reviews__text-amount">{MIN_COMMENT_LENGTH} characters</b>.
         </p>
         <button
           className="reviews__submit form__submit button"
@@ -90,6 +92,7 @@ export default function CommentForm() {
           disabled={!isValid}
           onClick={(e)=>{
             e.preventDefault();
+            onSubmitClick(reviewState);
             setReviewState(initialState);
           }}
         >

@@ -33,7 +33,7 @@ export default function MainPage () {
             </section>
             <div className="cities__right-section">
               <section className="cities__map map">
-                {offersMockData.length && <CityMap offersMockData={offersMockData} selectedOfferId={activeOffer}/>}
+                {offersMockData.length && <CityMap key={city} offersMockData={offersMockData} selectedOfferId={activeOffer}/>}
               </section>
             </div>
           </div>

@@ -24,7 +24,6 @@ function CityMap({offersMockData, selectedOfferId}: ICityMapProps) {
   const mapRef = useRef(null);
   const city = useMemo(()=>offersMockData[0]?.city, [offersMockData]);
   const map = useMap(mapRef, city);
-
   useEffect(() => {
     if (map) {
       offersMockData.forEach((offer) => {
@@ -38,7 +37,7 @@ function CityMap({offersMockData, selectedOfferId}: ICityMapProps) {
           .addTo(map);
       });
     }
-  }, [map, offersMockData, selectedOfferId, currentCustomIcon, defaultCustomIcon]);
+  }, [map, offersMockData, selectedOfferId]);
   return (
     <div
       style={{height: '100%'}}
