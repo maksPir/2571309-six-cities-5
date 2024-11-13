@@ -26,8 +26,13 @@ const ratingData = [
     value:1,
     title: 'terribly'}];
 
+<<<<<<< HEAD:src/widgets/review-form/ui/ui.tsx
 export default function ReviewForm({onSubmitClick}: IReviewFormProps) {
   const [reviewState, setReviewState] = useState<Pick<ReviewType, 'comment' | 'rating'>>(initialState);
+=======
+export default function CommentForm() {
+  const [reviewState, setReviewState] = useState<Pick<ReviewType, 'comment' | 'rating'> >(initialState);
+>>>>>>> module7-task2:src/widgets/comment-form/ui/ui.tsx
   const [isValid, setIsValid] = useState<boolean>(false);
   useEffect(()=>{
     if((reviewState.comment.length < MIN_COMMENT_LENGTH || reviewState.comment.length > MAX_COMMENT_LENGTH || reviewState.rating === 0) && isValid) {
