@@ -195,7 +195,7 @@ export default function OfferPage() {
             </div>
           </div>
           <section className="offer__map map">
-            <CityMap offersMockData={[...OFFERS_NEIGHBOURHOOD_MOCK_DATA,mainOffer]} selectedOfferId={idOffer}/>
+            <CityMap offersData={[...OFFERS_NEIGHBOURHOOD_MOCK_DATA,mainOffer]} selectedOfferId={idOffer}/>
           </section>
         </section>
         <div className="container">
@@ -203,7 +203,7 @@ export default function OfferPage() {
             <h2 className="near-places__title">
           Other places in the neighbourhood
             </h2>
-            <OffersList block='near-places' offersMockData={OFFERS_NEIGHBOURHOOD_MOCK_DATA}/>
+            <OffersList block='near-places' offersData={OFFERS_NEIGHBOURHOOD_MOCK_DATA}/>
           </section>
         </div>
       </main>
