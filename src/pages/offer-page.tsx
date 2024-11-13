@@ -1,12 +1,11 @@
-import { Navigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { ReviewList } from '../widgets/review-list';
 import { CityMap } from '../widgets/city-map';
 import { OffersList } from '../widgets/card-list';
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../shared/lib';
 import { OfferSection } from '../widgets/offer-section';
-import { fetchOfferById } from '../entities/offer/model/action';
-import { routesEnum } from '../shared/config';
+import { fetchOfferById, setOfferOnPage } from '../entities/offer/model/action';
 import { Spinner } from '../shared/ui/spinner';
 import { OfferGallery } from '../widgets/offer-gallery';
 import { AddReviewForm } from '../features/addReview';
@@ -14,25 +13,25 @@ import { AuthEnum } from '../entities/user';
 
 export default function OfferPage() {
   const { id: idOffer } = useParams();
-  const {offerOnPage,isLoading,nearOffers} = useAppSelector((state)=>state.offer);
+  const {offerOnPage,nearOffers} = useAppSelector((state)=>state.offer);
   const {reviews} = useAppSelector((state)=>state.review);
   const {authorizationStatus} = useAppSelector((state)=>state.user);
   const dispatch = useAppDispatch();
+  useEffect(()=>()=>{
+    dispatch(setOfferOnPage(null));
+  },[dispatch]);
   useEffect(()=>{
     dispatch(fetchOfferById(idOffer ?? ''));
   },[idOffer,dispatch]);
-  if(isLoading) {
+  if(!offerOnPage) {
     return <Spinner/>;
-  }
-  if(!offerOnPage && !isLoading) {
-    return <Navigate to={routesEnum.NOT_FOUND}/>;
   }
   return (
     <div className="page">
       <main className="page__main page__main--offer">
         <section className="offer">
-          <OfferGallery images={offerOnPage!.images.slice(0,6)}/>
-          <OfferSection offer={offerOnPage!}>
+          <OfferGallery images={offerOnPage.images.slice(0,6)}/>
+          <OfferSection offer={offerOnPage}>
             <section className="offer__reviews reviews">
               <h2 className="reviews__title">
               Reviews · <span className="reviews__amount">{reviews.length}</span>
@@ -42,7 +41,7 @@ export default function OfferPage() {
             </section>
           </OfferSection>
           <section className="offer__map map">
-            <CityMap offersData={[...nearOffers,offerOnPage!]} selectedOfferId={idOffer}/>
+            <CityMap offersData={[...nearOffers,offerOnPage]} selectedOfferId={idOffer}/>
           </section>
         </section>
         <div className="container">
@@ -50,7 +49,7 @@ export default function OfferPage() {
             <h2 className="near-places__title">
           Other places in the neighbourhood
             </h2>
-            <OffersList block='near-places' offersData={OFFERS_NEIGHBOURHOOD_MOCK_DATA}/>
+            <OffersList block='near-places' offersData={nearOffers}/>
           </section>
         </div>
       </main>

@@ -7,10 +7,11 @@ import { API_ROUTES } from './config';
 import { redirectToRoute } from '../../user/model/action';
 import { routesEnum } from '../../../shared/config';
 import { fetchReviews } from '../../review/model/action';
+import { Cities } from '../../../shared/api';
 
-export const changeCity = createAction<string>('offer/changeCity');
+export const changeCity = createAction<Cities>('offer/changeCity');
 export const fillOffers = createAction<OfferType[]>('offer/fillOffers');
-export const setOfferOnPage = createAction<OfferType>('offer/setOfferOnPage');
+export const setOfferOnPage = createAction<OfferType|null>('offer/setOfferOnPage');
 export const setNearOffer = createAction<OfferType[]>('offer/setNearOffer');
 export const changeSort = createAction<SortingOptionsEnum>('offer/changeSort');
 export const setOffersDataLoadingStatus = createAction<boolean>('offer/setOffersDataLoadingStatus');
