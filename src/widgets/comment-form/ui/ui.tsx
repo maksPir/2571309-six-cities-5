@@ -25,11 +25,7 @@ const ratingData = [
     title: 'terribly'}];
 
 export default function CommentForm() {
-<<<<<<< HEAD
-  const [reviewState, setReviewState] = useState<Pick<ReviewType, 'comment' | 'rating'>>(initialState);
-=======
   const [reviewState, setReviewState] = useState<Pick<ReviewType, 'comment' | 'rating'> >(initialState);
->>>>>>> module5-task2
   const [isValid, setIsValid] = useState<boolean>(false);
   useEffect(()=>{
     if((reviewState.comment.length < 50 || reviewState.comment.length > 300 || reviewState.rating === 0) && isValid) {
