@@ -1,12 +1,14 @@
 import { Link } from 'react-router-dom';
 import { routesEnum } from '../../../shared/config';
 import { IHeaderProps } from './types';
-import { useAppDispatch } from '../../../shared/lib';
+import { useAppDispatch, useAppSelector } from '../../../shared/lib';
 import { logout } from '../../../entities/user/model/action';
 import { memo } from 'react';
+import { selectFavorites } from '../../../entities/offer/model/selectors';
 
 function MemoHeader(props: IHeaderProps) {
   const dispatch = useAppDispatch();
+  const favorites = useAppSelector(selectFavorites);
   return(
     <header className="header">
       <div className="container">
@@ -36,7 +38,7 @@ function MemoHeader(props: IHeaderProps) {
                     <span className="header__user-name user__name">
                       {props.user?.email} Oliver.conner@gmail.com
                     </span>
-                    <span className="header__favorite-count">3</span>
+                    <span className="header__favorite-count">{favorites.length}</span>
                   </Link>
                 </li>
               )}

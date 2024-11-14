@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { store } from './app/store';
 import { fetchOffers } from './entities/offer';
 import { checkAuth } from './entities/user/model/action';
+import { fetchFavorites } from './entities/offer/model/action';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -12,6 +13,7 @@ const root = ReactDOM.createRoot(
 
 store.dispatch(fetchOffers());
 store.dispatch(checkAuth());
+store.dispatch(fetchFavorites());
 root.render(
   <React.StrictMode>
     <Provider store={store}>

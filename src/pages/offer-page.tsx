@@ -8,7 +8,7 @@ import { OfferSection } from '../widgets/offer-section';
 import { fetchOfferById, setOfferOnPage } from '../entities/offer/model/action';
 import { Spinner } from '../shared/ui/spinner';
 import { OfferGallery } from '../widgets/offer-gallery';
-import { AddReviewForm } from '../features/addReview';
+import { AddReviewForm } from '../features/add-review-form';
 import { AuthEnum } from '../entities/user';
 import { OfferType } from '../shared/types';
 import { nearOffersSelector, offerOnPageSelector } from '../entities/offer/model/selectors';
