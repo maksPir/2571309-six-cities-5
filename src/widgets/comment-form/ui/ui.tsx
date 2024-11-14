@@ -33,7 +33,7 @@ export default function CommentForm() {
     } else if (reviewState.comment.length >= 50 && reviewState.comment.length <= 300 && reviewState.rating !== 0 && !isValid) {
       setIsValid(true);
     }
-  },[reviewState]);
+  },[reviewState,isValid]);
   return (
     <form className="reviews__form form" action="#" method="post">
       <label className="reviews__label form__label" htmlFor="review">
