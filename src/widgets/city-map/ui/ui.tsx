@@ -21,7 +21,7 @@ const currentCustomIcon = leaflet.icon({
   iconSize: [40, 40],
   iconAnchor: [20, 40],
 });
-function CityMap({offersData, selectedOfferId,city}: ICityMapProps) {
+function MemoCityMap({offersData, selectedOfferId,city}: ICityMapProps) {
   const mapRef = useRef(null);
   const map = useMap(mapRef, city);
   useEffect(() => {
@@ -47,4 +47,4 @@ function CityMap({offersData, selectedOfferId,city}: ICityMapProps) {
   );
 }
 
-export default memo(CityMap);
+export const CityMap = memo(MemoCityMap);

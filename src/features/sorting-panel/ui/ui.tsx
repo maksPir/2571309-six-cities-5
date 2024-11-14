@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../../shared/lib';
 import { SortingOptionsEnum } from './const';
 import { selectCurrentSort } from '../../../entities/offer/model/selectors';
 
-function SortingPanel() {
+function MemoSortingPanel() {
   const dispatch = useAppDispatch();
   const sort = useAppSelector(selectCurrentSort);
   const [isExpanded,setIsExpanded] = useState<boolean>(false);
@@ -37,4 +37,4 @@ function SortingPanel() {
   );
 }
 
-export default memo(SortingPanel);
+export const SortingPanel = memo(MemoSortingPanel);

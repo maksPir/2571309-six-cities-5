@@ -3,7 +3,7 @@ import { ICardOfferProps } from './types';
 import { paramsByBlockName } from './const';
 import { memo } from 'react';
 
-function CardOffer ({block, offer, onMouseMoveCallback}: ICardOfferProps): JSX.Element {
+function MemoCardOffer ({block, offer, onMouseMoveCallback}: ICardOfferProps): JSX.Element {
   return (
     <article className={`${block}__card place-card`} onMouseEnter={()=>{
       onMouseMoveCallback?.(offer.id);
@@ -61,4 +61,4 @@ function CardOffer ({block, offer, onMouseMoveCallback}: ICardOfferProps): JSX.E
     </article>
   );
 }
-export default memo(CardOffer);
+export const CardOffer = memo(MemoCardOffer);

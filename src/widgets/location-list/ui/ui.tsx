@@ -4,7 +4,7 @@ import { Cities } from '../../../shared/api';
 import { useAppDispatch } from '../../../shared/lib';
 import { LocationItem } from '../../location';
 
-const LocationList = () => {
+const MemoLocationList = () => {
   const dispatch = useAppDispatch();
   return (
     <section className="locations container">
@@ -16,4 +16,4 @@ const LocationList = () => {
     </section>
   );
 };
-export default memo(LocationList);
+export const LocationList = memo(MemoLocationList);

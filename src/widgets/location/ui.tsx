@@ -3,7 +3,7 @@ import { ILocationProps } from './types';
 import { useAppSelector } from '../../shared/lib';
 import { memo } from 'react';
 
-function LocationItem(props: ILocationProps) {
+function MemoLocationItem(props: ILocationProps) {
   const {city} = useAppSelector((state)=>state.offer);
   return (
     <li className="locations__item">
@@ -15,4 +15,4 @@ function LocationItem(props: ILocationProps) {
     </li>
   );
 }
-export default memo(LocationItem);
+export const LocationItem = memo(MemoLocationItem);

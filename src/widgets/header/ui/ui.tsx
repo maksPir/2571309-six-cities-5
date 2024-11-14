@@ -5,7 +5,7 @@ import { useAppDispatch } from '../../../shared/lib';
 import { logout } from '../../../entities/user/model/action';
 import { memo } from 'react';
 
-function Header(props: IHeaderProps) {
+function MemoHeader(props: IHeaderProps) {
   const dispatch = useAppDispatch();
   return(
     <header className="header">
@@ -64,4 +64,4 @@ function Header(props: IHeaderProps) {
   );
 }
 
-export default memo(Header);
+export const Header = memo(MemoHeader);
