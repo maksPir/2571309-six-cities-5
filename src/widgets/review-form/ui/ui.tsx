@@ -1,5 +1,5 @@
 
-import {Fragment, useEffect, useState} from 'react';
+import {Fragment, useEffect, useRef, useState} from 'react';
 import { ReviewType } from '../../../entities/review/model/types';
 import { IReviewFormProps } from './types';
 import { MAX_COMMENT_LENGTH, MIN_COMMENT_LENGTH } from './const';
