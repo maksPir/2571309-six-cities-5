@@ -5,10 +5,12 @@ import { useAppDispatch, useAppSelector } from '../../../shared/lib';
 import { logout } from '../../../entities/user/model/action';
 import { memo } from 'react';
 import { selectFavorites } from '../../../entities/offer/model/selectors';
+import { userSelector } from '../../../entities/user/model/selectors';
 
 function MemoHeader(props: IHeaderProps) {
   const dispatch = useAppDispatch();
   const favorites = useAppSelector(selectFavorites);
+  const user = useAppSelector(userSelector);
   return(
     <header className="header">
       <div className="container">
@@ -36,7 +38,7 @@ function MemoHeader(props: IHeaderProps) {
                   >
                     <div className="header__avatar-wrapper user__avatar-wrapper"></div>
                     <span className="header__user-name user__name">
-                      {props.user?.email} Oliver.conner@gmail.com
+                      {user?.email}
                     </span>
                     <span className="header__favorite-count">{favorites.length}</span>
                   </Link>

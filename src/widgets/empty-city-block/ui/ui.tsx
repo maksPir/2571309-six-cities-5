@@ -10,7 +10,7 @@ function MemoEmptyCityBlock({city}:IEmptyCityBlockProps) {
           <p className="cities__status-description">We could not find any property available at the moment in {city}</p>
         </div>
       </section>
-      <div className="cities__right-section"></div>
+      <div className="cities__right-section"><section className="cities__map map"></section></div>
     </div>
   );
 }
