@@ -5,6 +5,7 @@ import { AxiosInstance } from 'axios';
 import { API_ROUTES } from './config';
 import { dropToken, saveToken } from '../../../shared/api/typicode/token';
 import { routesEnum } from '../../../shared/config';
+import { fetchOffers } from '../../offer';
 
 export const changeAuthStatus = createAction<AuthEnum>('user/changeAuthStatus');
 export const redirectToRoute = createAction<routesEnum>('user/redirectToRoute');
@@ -20,6 +21,7 @@ export const checkAuth = createAsyncThunk<void, undefined,
     try {
       await api.get<UserType>(API_ROUTES.LOGIN);
       dispatch(changeAuthStatus(AuthEnum.AUTHENTICATED));
+      dispatch(fetchOffers());
     } catch {
       dispatch(changeAuthStatus(AuthEnum.NO_AUTHENTICATED));
       dispatch(redirectToRoute(routesEnum.LOGIN));
@@ -39,6 +41,7 @@ export const login = createAsyncThunk<void, AuthData, {
       saveToken(token);
       dispatch(changeAuthStatus(AuthEnum.AUTHENTICATED));
       dispatch(redirectToRoute(routesEnum.MAIN));
+      dispatch(fetchOffers());
     },
   );
 
