@@ -1,11 +1,19 @@
 import { memo } from 'react';
-import { useAppDispatch } from '../../../shared/lib';
+import { useAppDispatch, useAppSelector } from '../../../shared/lib';
 import { IChangeFavoriteStatusBtnProps } from './types';
 import { changeFavoriteStatus } from '../../../entities/offer/model/action';
+import { authSelector } from '../../../entities/user/model/selectors';
+import { AuthEnum } from '../../../entities/user';
+import { redirectToRoute } from '../../../entities/user/model/action';
+import { routesEnum } from '../../../shared/config';
 
 function MemoFavoriteStatusBtn({offer}:IChangeFavoriteStatusBtnProps) {
   const dispatch = useAppDispatch();
+  const authStatus = useAppSelector(authSelector);
   const btnClickHandler = () => {
+    if(authStatus === AuthEnum.NO_AUTHENTICATED) {
+      return dispatch(redirectToRoute(routesEnum.LOGIN));
+    }
     dispatch(changeFavoriteStatus({offerId: offer.id, status: +!offer.isFavorite}));
   };
   return(
