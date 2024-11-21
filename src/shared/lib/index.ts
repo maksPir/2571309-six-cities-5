@@ -7,6 +7,9 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 export const compareDates = (dateString1: string, dateString2: string) => {
   const date1 = new Date(dateString1);
   const date2 = new Date(dateString2);
+  if(!date1?.getDate() || !date2?.getDate()) {
+    return 1;
+  }
   if(date1 < date2) {
     return 1;
   }

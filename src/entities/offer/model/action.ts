@@ -11,7 +11,7 @@ import { Cities } from '../../../shared/api';
 import { ChangeFavoriteStatus } from './types';
 
 export const changeCity = createAction<Cities>('offer/changeCity');
-export const fillOffers = createAction<OfferType[]>('offer/fillOffers');
+export const setOffers = createAction<OfferType[]>('offer/setOffers');
 export const setOfferOnPage = createAction<OfferType|null>('offer/setOfferOnPage');
 export const setNearOffer = createAction<OfferType[]>('offer/setNearOffer');
 export const changeSort = createAction<SortingOptionsEnum>('offer/changeSort');
@@ -31,7 +31,7 @@ export const fetchOffers = createAsyncThunk<void, undefined,
     dispatch(setOffersDataLoadingStatus(true));
     const {data} = await api.get<OfferType[]>(API_ROUTES.GET_OFFERS);
     dispatch(setOffersDataLoadingStatus(false));
-    dispatch(fillOffers(data));
+    dispatch(setOffers(data));
   },
 );
 
