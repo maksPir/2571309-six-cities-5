@@ -1,5 +1,13 @@
-import { addReview, setIsLoadingReview, setReviewsOnPage } from '../action';
+import MockAdapter from 'axios-mock-adapter';
+import thunk from 'redux-thunk';
+import { Action } from 'redux';
+import { addReview, fetchReviews, setIsLoadingReview, setReviewsOnPage } from '../action';
 import { reviewsReducer } from '../reviews';
+import { $api } from '../../../../shared/api';
+import { configureMockStore } from '@jedmao/redux-mock-store';
+import { RootState } from '../../../../shared/lib/types';
+import { AppThunkDispatch, extractActionsTypes } from '../../../../shared/lib';
+import { API_ROUTES } from '../config';
 
 describe('Review slice', ()=>{
   it('should return initial state with empty action',()=>{
@@ -93,3 +101,48 @@ describe('Review slice', ()=>{
     expect(calculatedRes).toEqual(expectedRes);
   });
 });
+
+describe('Review async actions', ()=>{
+  const mockAxiosAdapter = new MockAdapter($api);
+  const middleware = [thunk.withExtraArgument($api)];
+  const mockStoreCreator = configureMockStore<RootState, Action<string>, AppThunkDispatch>(middleware);
+  let store: ReturnType<typeof mockStoreCreator>;
+  beforeEach(() => {
+    store = mockStoreCreator({ review: { isError: false, isLoading: false, reviews: [] }});
+  });
+
+  describe('fetchReviews', ()=>{
+    it(`should dispatch "fetchReviews.pending",
+       "setReviewsOnPage" and "fetchReviews.fulfilled" with thunk "fetchReviews"`, async ()=>{
+      mockAxiosAdapter.onGet(`${API_ROUTES.GET_REVIEWS}/123321`).reply(200);
+      await store.dispatch(fetchReviews('123321'));
+      const actions = extractActionsTypes(store.getActions());
+      expect(actions).toEqual([
+        fetchReviews.pending.type,
+        setReviewsOnPage.type,
+        fetchReviews.fulfilled.type,
+      ]);
+    });
+  });
+
+  describe('addReview', ()=>{
+    it(`should dispatch "addReview.pending", "setIsLoadingReview", "fetchReviews.pending",
+      "setReviewsOnPage", "fetchReviews.fulfilled" and 
+      "addReview.fulfilled" with thunk "addReview"`, async ()=>{
+      mockAxiosAdapter.onPost(`${API_ROUTES.GET_REVIEWS}/123321`,{comment:'', rating:5}).reply(201);
+      await store.dispatch(addReview({comment:'',offerId:'123321',rating:5}));
+      const actions = extractActionsTypes(store.getActions());
+      expect(actions).toEqual([
+        addReview.pending.type,
+        setIsLoadingReview.type,
+        fetchReviews.pending.type,
+        setReviewsOnPage.type,
+        fetchReviews.fulfilled.type,
+        setIsLoadingReview.type,
+        addReview.fulfilled.type,
+      ]);
+    });
+  });
+}
+);
+

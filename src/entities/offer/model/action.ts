@@ -6,7 +6,6 @@ import { OfferType } from '../../../shared/types';
 import { API_ROUTES } from './config';
 import { redirectToRoute } from '../../user/model/action';
 import { routesEnum } from '../../../shared/config';
-import { fetchReviews } from '../../review/model/action';
 import { Cities } from '../../../shared/api';
 import { ChangeFavoriteStatus } from './types';
 
@@ -62,8 +61,6 @@ export const fetchOfferById = createAsyncThunk<void, string,
       dispatch(setOffersDataLoadingStatus(true));
       const {data} = await api.get<OfferType>(`${API_ROUTES.GET_OFFERS}/${offerId}`);
       dispatch(setOfferOnPage(data));
-      dispatch(fetchNearOffersById(offerId));
-      dispatch(fetchReviews(offerId));
     } catch(e) {
       dispatch(redirectToRoute(routesEnum.NOT_FOUND));
     } finally {
@@ -96,8 +93,8 @@ export const changeFavoriteStatus = createAsyncThunk<
     'favorite/changeFavoriteStatus',
     async ({status,offerId}, {dispatch, extra: api}) => {
       await api.post(`${API_ROUTES.GET_FAVORITES}/${offerId}/${status}`);
-      dispatch(fetchFavorites());
-      dispatch(fetchOffers());
+      await dispatch(fetchFavorites());
+      await dispatch(fetchOffers());
     },
   );
 

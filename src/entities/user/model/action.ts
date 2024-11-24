@@ -22,7 +22,7 @@ export const checkAuth = createAsyncThunk<void, undefined,
     try {
       const {data: user} = await api.get<UserType>(API_ROUTES.LOGIN);
       dispatch(setUser(user));
-      dispatch(fetchFavorites());
+      await dispatch(fetchFavorites());
     } catch {
       dispatch(setUser(null));
       dispatch(redirectToRoute(routesEnum.LOGIN));
@@ -42,8 +42,8 @@ export const login = createAsyncThunk<void, AuthData, {
       saveToken(user.token);
       dispatch(redirectToRoute(routesEnum.MAIN));
       dispatch(setUser(user));
-      dispatch(fetchFavorites());
-      dispatch(fetchOffers());
+      await dispatch(fetchFavorites());
+      await dispatch(fetchOffers());
     },
   );
 
@@ -58,6 +58,6 @@ export const logout = createAsyncThunk<void, undefined, {
       await api.delete(API_ROUTES.LOGOUT);
       dropToken();
       dispatch(setUser(null));
-      dispatch(fetchOffers());
+      await dispatch(fetchOffers());
     },
   );

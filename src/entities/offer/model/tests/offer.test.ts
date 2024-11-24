@@ -1,8 +1,16 @@
 import { SortingOptionsEnum } from '../../../../features/sorting-panel';
-import { Cities } from '../../../../shared/api';
+import { $api, Cities } from '../../../../shared/api';
+import MockAdapter from 'axios-mock-adapter';
+import thunk from 'redux-thunk';
+import { Action } from 'redux';
+import { configureMockStore } from '@jedmao/redux-mock-store';
 import { PlaceType } from '../../../../shared/types';
-import { changeCity, changeSort, setFavorites, setNearOffer, setOfferOnPage, setOffers, setOffersDataLoadingStatus } from '../action';
+import { changeCity, changeFavoriteStatus, changeSort, fetchFavorites, fetchNearOffersById, fetchOfferById, fetchOffers, setFavorites, setNearOffer, setOfferOnPage, setOffers, setOffersDataLoadingStatus } from '../action';
 import { offersReducer } from '../offer';
+import { RootState } from '../../../../shared/lib/types';
+import { AppThunkDispatch, extractActionsTypes } from '../../../../shared/lib';
+import { API_ROUTES as OFFER_API_ROUTES } from '../config';
+import { redirectToRoute } from '../../../user/model/action';
 
 describe('Offer slice', ()=>{
   it('should return initial state with empty action',()=>{
@@ -271,3 +279,112 @@ describe('Offer slice', ()=>{
     expect(calculatedRes).toEqual(expectedRes);
   });
 });
+
+describe('Offer async actions', ()=>{
+  const mockAxiosAdapter = new MockAdapter($api);
+  const middleware = [thunk.withExtraArgument($api)];
+  const mockStoreCreator = configureMockStore<RootState, Action<string>, AppThunkDispatch>(middleware);
+  let store: ReturnType<typeof mockStoreCreator>;
+  beforeEach(() => {
+    store = mockStoreCreator({ offer: { offers: [], city: Cities.Paris, favorites: [], isLoading: false,
+      nearOffers: [], offerOnPage: null, sort: SortingOptionsEnum.Popular }});
+  });
+
+  describe('fetchOffers', ()=>{
+    it(`should dispatch "fetchOffers.pending", "setOffersDataLoadingStatus",
+       "setOffers" and "fetchOffers.fulfilled" with thunk "fetchOffers"`, async ()=>{
+      mockAxiosAdapter.onGet(OFFER_API_ROUTES.GET_OFFERS).reply(200);
+      await store.dispatch(fetchOffers());
+      const actions = extractActionsTypes(store.getActions());
+      expect(actions).toEqual([
+        fetchOffers.pending.type,
+        setOffersDataLoadingStatus.type,
+        setOffersDataLoadingStatus.type,
+        setOffers.type,
+        fetchOffers.fulfilled.type,
+      ]);
+    });
+  });
+
+  describe('fetchNearOffersById', ()=>{
+    it(`should dispatch "fetchNearOffersById.pending", "setNearOffer" 
+        and "fetchNearOffersById.fulfilled" with thunk "fetchNearOffersById"`, async ()=>{
+      mockAxiosAdapter.onGet(`${OFFER_API_ROUTES.GET_OFFERS}/123321/nearby`).reply(200);
+      await store.dispatch(fetchNearOffersById('123321'));
+      const actions = extractActionsTypes(store.getActions());
+      expect(actions).toEqual([
+        fetchNearOffersById.pending.type,
+        setNearOffer.type,
+        fetchNearOffersById.fulfilled.type,
+      ]);
+    });
+  });
+
+  describe('fetchOfferById', ()=>{
+    it(`should dispatch "fetchOfferById.pending", "setOfferOnPage", "setOffersDataLoadingStatus", 
+        and "fetchOfferById.fulfilled" with thunk "fetchOfferById"`, async ()=>{
+      mockAxiosAdapter.onGet(`${OFFER_API_ROUTES.GET_OFFERS}/a20a52b2-efc2-4b0f-9396-4bdfbe5e9543`).reply(200);
+      await store.dispatch(fetchOfferById('a20a52b2-efc2-4b0f-9396-4bdfbe5e9543'));
+      const actions = extractActionsTypes(store.getActions());
+      expect(actions).toEqual([
+        fetchOfferById.pending.type,
+        setOffersDataLoadingStatus.type,
+        setOfferOnPage.type,
+        setOffersDataLoadingStatus.type,
+        fetchOfferById.fulfilled.type,
+      ]);
+    });
+
+    it(`should dispatch "fetchOfferById.pending", "redirectToRoute", "setOffersDataLoadingStatus", 
+      and "fetchOfferById.fulfilled" with thunk "fetchOfferById"`, async ()=>{
+      mockAxiosAdapter.onGet(`${OFFER_API_ROUTES.GET_OFFERS}/a20a52b2-efc2-4b0f-9396-4bdfbe5e9543`).reply(400);
+      await store.dispatch(fetchOfferById('a20a52b2-efc2-4b0f-9396-4bdfbe5e9543'));
+      const actions = extractActionsTypes(store.getActions());
+      expect(actions).toEqual([
+        fetchOfferById.pending.type,
+        setOffersDataLoadingStatus.type,
+        redirectToRoute.type,
+        setOffersDataLoadingStatus.type,
+        fetchOfferById.fulfilled.type,
+      ]);
+    });
+  });
+
+  describe('fetchFavorites', ()=>{
+    it(`should dispatch "fetchFavorites.pending", "setFavorites"
+        and "fetchFavorites.fulfilled" with thunk "fetchFavorites"`, async ()=>{
+      mockAxiosAdapter.onGet(OFFER_API_ROUTES.GET_FAVORITES).reply(200);
+      await store.dispatch(fetchFavorites());
+      const actions = extractActionsTypes(store.getActions());
+      expect(actions).toEqual([
+        fetchFavorites.pending.type,
+        setFavorites.type,
+        fetchFavorites.fulfilled.type,
+      ]);
+    });
+  });
+
+  describe('changeFavoriteStatus', ()=>{
+    it(`should dispatch "changeFavoriteStatus.pending", "fetchFavorites.pending", "setFavorites",
+        "fetchFavorites.fulfilled", "fetchFavorites.fulfilled", "fetchOffers.pending", "setOffersDataLoadingStatus",
+        "setOffers", "fetchOffers.fulfilled", "changeFavoriteStatus.fulfilled" 
+        with thunk "changeFavoriteStatus"`, async ()=>{
+      mockAxiosAdapter.onPost(`${OFFER_API_ROUTES.GET_FAVORITES}/123321/1`).reply(201);
+      await store.dispatch(changeFavoriteStatus({offerId:'123321',status: 1}));
+      const actions = extractActionsTypes(store.getActions());
+      expect(actions).toEqual([
+        changeFavoriteStatus.pending.type,
+        fetchFavorites.pending.type,
+        setFavorites.type,
+        fetchFavorites.fulfilled.type,
+        fetchOffers.pending.type,
+        setOffersDataLoadingStatus.type,
+        setOffersDataLoadingStatus.type,
+        setOffers.type,
+        fetchOffers.fulfilled.type,
+        changeFavoriteStatus.fulfilled.type,
+      ]);
+    });
+  });
+}
+);
