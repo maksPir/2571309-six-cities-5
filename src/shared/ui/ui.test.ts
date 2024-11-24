@@ -23,10 +23,9 @@ describe('Function dateFormatter',()=>{
 
   it('should return date in monthWithYear format',()=>{
     const testDateStr = '2019-05-08T14:13:56.569Z';
-    const testFormat = '';
     const expectedRes = 'May 2019';
 
-    const calculateRes = dateFormatter(testDateStr, testFormat);
+    const calculateRes = dateFormatter(testDateStr);
 
     expect(calculateRes).toBe(expectedRes);
   });
