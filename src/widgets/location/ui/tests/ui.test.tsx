@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react';
-import { withHistory } from '../../../shared/providers';
-import { LocationItem } from '../ui';
-import { Cities } from '../../../shared/api';
-import { withStore } from '../../../shared/providers/with-store';
-import { makeFakeStore } from '../../../shared/mocks';
+import { withHistory } from '../../../../shared/providers';
+import { LocationItem } from '..';
+import { Cities } from '../../../../shared/api';
+import { withStore } from '../../../../shared/providers/with-store';
+import { makeFakeStore } from '../../../../shared/mocks';
 import userEvent from '@testing-library/user-event';
 const fun = vi.fn();
 const fakeFunctions = {
