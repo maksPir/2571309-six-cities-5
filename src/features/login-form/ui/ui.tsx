@@ -41,7 +41,7 @@ export default function LoginForm() {
           required
         />
       </div>
-      <button className="login__submit form__submit button" type="submit">
+      <button data-testid="login-btn" className="login__submit form__submit button" type="submit">
             Sign in
       </button>
     </form>
