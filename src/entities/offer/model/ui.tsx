@@ -19,14 +19,14 @@ function MemoCardOffer ({block, offer, onMouseMoveCallback}: ICardOfferProps): J
         </div>
       )}
       <div className={`${block}__image-wrapper place-card__image-wrapper`}>
-        <a href="#">
+        <Link to="#">
           <img
             className="place-card__image"
             src={offer.previewImage}
             {...paramsByBlockName[block]}
             alt="Place image"
           />
-        </a>
+        </Link>
       </div>
       <div className={`${block}__card-info place-card__info`}>
         <div className="place-card__price-wrapper">
@@ -34,7 +34,7 @@ function MemoCardOffer ({block, offer, onMouseMoveCallback}: ICardOfferProps): J
             <b className="place-card__price-value">€{offer.price}</b>
             <span className="place-card__price-text">/&nbsp;night</span>
           </div>
-          <FavoriteStatusBtn offer={offer}/>
+          <FavoriteStatusBtn block='place-card__bookmark' offer={offer}/>
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">

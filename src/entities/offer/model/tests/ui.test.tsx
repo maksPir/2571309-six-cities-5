@@ -10,6 +10,7 @@ import { API_ROUTES } from '../config';
 import { extractActionsTypes } from '../../../../shared/lib';
 import { changeFavoriteStatus, fetchFavorites, fetchOffers, setFavorites, setOffers, setOffersDataLoadingStatus } from '../action';
 import { redirectToRoute } from '../../../user/model/action';
+import { SortingOptionsEnum } from '../../../../features/sorting-panel';
 describe('Component: CardOffer', ()=>{
   const fakeOffer = {
     'id': 'a20a52b2-efc2-4b0f-9396-4bdfbe5e9543',
@@ -61,7 +62,9 @@ describe('Component: CardOffer', ()=>{
 
   it('should changed offer favorite status by btn click',async ()=>{
     const componentWithHistory = withHistory(<CardOffer block='cities' offer={fakeOffer} />);
-    const {withStoreComponent, mockStore, mockAxiosAdapter} = withStore(componentWithHistory, {user:fakeUser});
+    const fakeOfferState = { offers: [], city: Cities.Paris, favorites: [], isLoading: false,
+      nearOffers: [], offerOnPage: null, sort: SortingOptionsEnum.Popular };
+    const {withStoreComponent, mockStore, mockAxiosAdapter} = withStore(componentWithHistory, {user:fakeUser, offer: fakeOfferState});
     render(withStoreComponent);
     const btnFavorite = screen.getByTestId('bth-favorite-offer');
     mockAxiosAdapter.onPost(`${API_ROUTES.GET_FAVORITES}/${fakeOffer.id}/1`).reply(201);

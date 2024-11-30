@@ -370,8 +370,42 @@ describe('Offer async actions', ()=>{
         "setOffers", "fetchOffers.fulfilled", "changeFavoriteStatus.fulfilled" 
         with thunk "changeFavoriteStatus"`, async ()=>{
       mockAxiosAdapter.onPost(`${OFFER_API_ROUTES.GET_FAVORITES}/123321/1`).reply(201);
-      await store.dispatch(changeFavoriteStatus({offerId:'123321',status: 1}));
-      const actions = extractActionsTypes(store.getActions());
+      mockAxiosAdapter.onGet(`${OFFER_API_ROUTES.GET_OFFERS}/123321`).reply(200);
+      const storeTest = mockStoreCreator({ offer: { offers: [], city: Cities.Paris, favorites: [], isLoading: false,
+        nearOffers: [], offerOnPage: {
+          'id': '123321',
+          'title': 'Wood and stone place',
+          'type': 'apartment' as PlaceType,
+          'price': 576,
+          'previewImage': 'https://14.design.htmlacademy.pro/static/hotel/14.jpg',
+          'city': {
+            'name': Cities.Amsterdam,
+            'location': {
+              'latitude': 48.85661,
+              'longitude': 2.351499,
+              'zoom': 13
+            }
+          },
+          'location': {
+            'latitude': 48.868610000000004,
+            'longitude': 2.342499,
+            'zoom': 16
+          },
+          'isFavorite': false,
+          'isPremium': false,
+          'rating': 2.1,
+          'description': 'TEst',
+          'bedrooms': 1,
+          'goods': [],
+          maxAdults: 1,
+          images: [''],
+          host:{ 'name': 'Oliver Conner',
+            'avatarUrl': 'https://url-to-image/image.png',
+            'isPro': false
+          }
+        }, sort: SortingOptionsEnum.Popular }});
+      await storeTest.dispatch(changeFavoriteStatus({offerId:'123321',status: 1}));
+      const actions = extractActionsTypes(storeTest.getActions());
       expect(actions).toEqual([
         changeFavoriteStatus.pending.type,
         fetchFavorites.pending.type,
@@ -382,6 +416,11 @@ describe('Offer async actions', ()=>{
         setOffersDataLoadingStatus.type,
         setOffers.type,
         fetchOffers.fulfilled.type,
+        fetchOfferById.pending.type,
+        setOffersDataLoadingStatus.type,
+        setOfferOnPage.type,
+        setOffersDataLoadingStatus.type,
+        fetchOfferById.fulfilled.type,
         changeFavoriteStatus.fulfilled.type,
       ]);
     });

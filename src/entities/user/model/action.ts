@@ -4,12 +4,12 @@ import { AppDispatch, RootState } from '../../../shared/lib/types';
 import { AxiosInstance } from 'axios';
 import { API_ROUTES } from './config';
 import { dropToken, saveToken } from '../../../shared/api/typicode/token';
-import { routesEnum } from '../../../shared/config';
+import { RoutesEnum } from '../../../shared/config';
 import { fetchFavorites, fetchOffers } from '../../offer/model/action';
 
 export const changeAuthStatus = createAction<AuthEnum>('user/changeAuthStatus');
 export const setUser = createAction<UserType|null>('user/setUser');
-export const redirectToRoute = createAction<routesEnum>('user/redirectToRoute');
+export const redirectToRoute = createAction<RoutesEnum>('user/redirectToRoute');
 export const checkAuth = createAsyncThunk<void, undefined,
 {
     dispatch: AppDispatch;
@@ -25,7 +25,7 @@ export const checkAuth = createAsyncThunk<void, undefined,
       await dispatch(fetchFavorites());
     } catch {
       dispatch(setUser(null));
-      dispatch(redirectToRoute(routesEnum.LOGIN));
+      dispatch(redirectToRoute(RoutesEnum.LOGIN));
     }
   },
 );
@@ -40,7 +40,7 @@ export const login = createAsyncThunk<void, AuthData, {
     async ({email, password}, {dispatch, extra: api}) => {
       const {data: user} = await api.post<UserType>(API_ROUTES.LOGIN, {email, password});
       saveToken(user.token);
-      dispatch(redirectToRoute(routesEnum.MAIN));
+      dispatch(redirectToRoute(RoutesEnum.MAIN));
       dispatch(setUser(user));
       await dispatch(fetchFavorites());
       await dispatch(fetchOffers());
