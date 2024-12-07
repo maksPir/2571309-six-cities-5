@@ -25,7 +25,7 @@ export default function CitiesBlock () {
     }
   }), [city, offers,currentSort]);
   const [activeOffer, setActiveOffer] = useState<string>('');
-  const onActiveOfferChangeCallback = useCallback((id: string) => {
+  const handleOfferItemMouseMove = useCallback((id: string) => {
     setActiveOffer(id);
   },[]);
   return (
@@ -39,7 +39,7 @@ export default function CitiesBlock () {
               <h2 className="visually-hidden">Places</h2>
               <b className="places__found">{offersFilteredData.length} places to stay in {city}</b>
               <SortingPanel/>
-              <OffersList block='cities' offersData={offersFilteredData} onActiveOfferChangeCallback={onActiveOfferChangeCallback}/>
+              <OffersList block='cities' offersData={offersFilteredData} onActiveOfferChangeCallback={handleOfferItemMouseMove}/>
             </section>
             <div className="cities__right-section">
               <section className="cities__map map">
