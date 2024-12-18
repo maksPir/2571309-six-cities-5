@@ -5,7 +5,7 @@ import { withHistory } from '../../../../shared/providers';
 import { withStore } from '../../../../shared/providers/with-store';
 import { PlaceType } from '../../../../shared/types';
 import { FavoriteStatusBtn } from '../ui';
-import { API_ROUTES } from '../../../../entities/offer/model/config';
+import { ApiRoutes } from '../../../../entities/offer/model/config';
 import userEvent from '@testing-library/user-event';
 import { extractActionsTypes } from '../../../../shared/lib';
 import { changeFavoriteStatus, fetchFavorites, fetchOfferById, fetchOffers, setFavorites, setOfferOnPage, setOffers, setOffersDataLoadingStatus } from '../../../../entities/offer/model/action';
@@ -13,6 +13,8 @@ import { redirectToRoute } from '../../../../entities/user/model/action';
 import { SortingOptionsEnum } from '../../../sorting-panel';
 
 describe('Component: FavoriteStatusBtn', ()=>{
+  const fakeOfferState = { offers: [], city: Cities.Paris, favorites: [], isLoading: false,
+    nearOffers: [], offerOnPage: null, sort: SortingOptionsEnum.Popular };
   it('should render component correctly with no favorite', ()=>{
     const mockOffer = {
       'id': 'a20a52b2-efc2-4b0f-9396-4bdfbe5e9543',
@@ -55,7 +57,7 @@ describe('Component: FavoriteStatusBtn', ()=>{
       }
     };
     const componentWithHistory = withHistory(<FavoriteStatusBtn offer={mockOffer}/>);
-    const {withStoreComponent} = withStore(componentWithHistory, {user: fakeUser});
+    const {withStoreComponent} = withStore(componentWithHistory, {user: fakeUser,offer: fakeOfferState});
     render(withStoreComponent);
     expect(screen.getByTestId('bth-favorite-offer')).toBeInTheDocument();
     expect(screen.getByText('To bookmarks')).toBeInTheDocument();
@@ -103,7 +105,7 @@ describe('Component: FavoriteStatusBtn', ()=>{
       }
     };
     const componentWithHistory = withHistory(<FavoriteStatusBtn offer={mockOffer}/>);
-    const {withStoreComponent} = withStore(componentWithHistory, {user: fakeUser});
+    const {withStoreComponent} = withStore(componentWithHistory, {user: fakeUser,offer: fakeOfferState});
     render(withStoreComponent);
     expect(screen.getByTestId('bth-favorite-offer')).toBeInTheDocument();
     expect(screen.getByTestId('bth-favorite-offer')).toHaveClass('offer__bookmark-button--active');
@@ -151,7 +153,7 @@ describe('Component: FavoriteStatusBtn', ()=>{
         isPro: false
       }
     };
-    const fakeOfferState = { offers: [], city: Cities.Paris, favorites: [], isLoading: false,
+    const fakeOfferStateByTest = { offers: [], city: Cities.Paris, favorites: [], isLoading: false,
       nearOffers: [], offerOnPage: {
         'id': '123321',
         'title': 'Wood and stone place',
@@ -185,13 +187,13 @@ describe('Component: FavoriteStatusBtn', ()=>{
         }
       }, sort: SortingOptionsEnum.Popular };
     const componentWithHistory = withHistory(<FavoriteStatusBtn offer={mockOffer}/>);
-    const {withStoreComponent, mockStore, mockAxiosAdapter} = withStore(componentWithHistory, {user:fakeUser, offer: fakeOfferState});
+    const {withStoreComponent, mockStore, mockAxiosAdapter} = withStore(componentWithHistory, {user:fakeUser, offer: fakeOfferStateByTest});
     render(withStoreComponent);
     const btnFavorite = screen.getByTestId('bth-favorite-offer');
-    mockAxiosAdapter.onPost(`${API_ROUTES.GET_FAVORITES}/${mockOffer.id}/0`).reply(201);
-    mockAxiosAdapter.onGet(`${API_ROUTES.GET_OFFERS}/${mockOffer.id}`).reply(200);
-    mockAxiosAdapter.onGet(API_ROUTES.GET_FAVORITES).reply(200);
-    mockAxiosAdapter.onGet(API_ROUTES.GET_OFFERS).reply(200);
+    mockAxiosAdapter.onPost(`${ApiRoutes.GET_FAVORITES}/${mockOffer.id}/0`).reply(201);
+    mockAxiosAdapter.onGet(`${ApiRoutes.GET_OFFERS}/${mockOffer.id}`).reply(200);
+    mockAxiosAdapter.onGet(ApiRoutes.GET_FAVORITES).reply(200);
+    mockAxiosAdapter.onGet(ApiRoutes.GET_OFFERS).reply(200);
     await userEvent.click(
       btnFavorite
     );
@@ -250,7 +252,7 @@ describe('Component: FavoriteStatusBtn', ()=>{
       }
     };
     const componentWithHistory = withHistory(<FavoriteStatusBtn offer={mockOffer}/>);
-    const {withStoreComponent, mockStore} = withStore(componentWithHistory, {user:{authorizationStatus:AuthEnum.NO_AUTHENTICATED,user:null}});
+    const {withStoreComponent, mockStore} = withStore(componentWithHistory, {user:{authorizationStatus:AuthEnum.NO_AUTHENTICATED,user:null}, offer: fakeOfferState});
     render(withStoreComponent);
     const btnFavorite = screen.getByTestId('bth-favorite-offer');
     await userEvent.click(

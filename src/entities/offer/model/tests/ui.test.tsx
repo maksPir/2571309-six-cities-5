@@ -6,7 +6,7 @@ import { withHistory } from '../../../../shared/providers';
 import { withStore } from '../../../../shared/providers/with-store';
 import { AuthEnum } from '../../../user';
 import userEvent from '@testing-library/user-event';
-import { API_ROUTES } from '../config';
+import { ApiRoutes } from '../config';
 import { extractActionsTypes } from '../../../../shared/lib';
 import { changeFavoriteStatus, fetchFavorites, fetchOffers, setFavorites, setOffers, setOffersDataLoadingStatus } from '../action';
 import { redirectToRoute } from '../../../user/model/action';
@@ -44,6 +44,8 @@ describe('Component: CardOffer', ()=>{
       'isPro': false
     }
   };
+  const fakeOfferState = { offers: [], city: Cities.Paris, favorites: [], isLoading: false,
+    nearOffers: [], offerOnPage: null, sort: SortingOptionsEnum.Popular };
   const fakeUser = {
     authorizationStatus: AuthEnum.AUTHENTICATED,
     user: {
@@ -54,7 +56,7 @@ describe('Component: CardOffer', ()=>{
   };
   it('should render component correctly',()=>{
     const componentWithHistory = withHistory(<CardOffer block='cities' offer={fakeOffer} />);
-    const {withStoreComponent} = withStore(componentWithHistory, {user:fakeUser});
+    const {withStoreComponent} = withStore(componentWithHistory, {user:fakeUser, offer:fakeOfferState});
     render(withStoreComponent);
     expect(screen.getByText(fakeOffer.title)).toBeInTheDocument();
     expect(screen.getByText(`€${fakeOffer.price}`)).toBeInTheDocument();
@@ -62,14 +64,12 @@ describe('Component: CardOffer', ()=>{
 
   it('should changed offer favorite status by btn click',async ()=>{
     const componentWithHistory = withHistory(<CardOffer block='cities' offer={fakeOffer} />);
-    const fakeOfferState = { offers: [], city: Cities.Paris, favorites: [], isLoading: false,
-      nearOffers: [], offerOnPage: null, sort: SortingOptionsEnum.Popular };
     const {withStoreComponent, mockStore, mockAxiosAdapter} = withStore(componentWithHistory, {user:fakeUser, offer: fakeOfferState});
     render(withStoreComponent);
     const btnFavorite = screen.getByTestId('bth-favorite-offer');
-    mockAxiosAdapter.onPost(`${API_ROUTES.GET_FAVORITES}/${fakeOffer.id}/1`).reply(201);
-    mockAxiosAdapter.onGet(API_ROUTES.GET_FAVORITES).reply(200);
-    mockAxiosAdapter.onGet(API_ROUTES.GET_OFFERS).reply(200);
+    mockAxiosAdapter.onPost(`${ApiRoutes.GET_FAVORITES}/${fakeOffer.id}/1`).reply(201);
+    mockAxiosAdapter.onGet(ApiRoutes.GET_FAVORITES).reply(200);
+    mockAxiosAdapter.onGet(ApiRoutes.GET_OFFERS).reply(200);
     await userEvent.click(
       btnFavorite
     );
@@ -91,7 +91,7 @@ describe('Component: CardOffer', ()=>{
 
   it('should redirect by btn click',async ()=>{
     const componentWithHistory = withHistory(<CardOffer block='cities' offer={fakeOffer} />);
-    const {withStoreComponent, mockStore} = withStore(componentWithHistory, {user:{authorizationStatus:AuthEnum.NO_AUTHENTICATED,user:null}});
+    const {withStoreComponent, mockStore} = withStore(componentWithHistory, {user:{authorizationStatus:AuthEnum.NO_AUTHENTICATED,user:null},offer: fakeOfferState});
     render(withStoreComponent);
     const btnFavorite = screen.getByTestId('bth-favorite-offer');
     await userEvent.click(

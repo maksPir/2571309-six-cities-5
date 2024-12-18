@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { IInitialStateOffersState } from './types';
-import { changeCity, changeSort, setOffers, setFavorites, setNearOffer, setOfferOnPage, setOffersDataLoadingStatus } from './action';
+import { changeCity, changeSort, setOffers, setFavorites, setNearOffer, setOfferOnPage, setOffersDataLoadingStatus, changeStatusOfFavorite } from './action';
 import { SortingOptionsEnum } from '../../../features/sorting-panel';
 import { Cities } from '../../../shared/api';
 
@@ -29,6 +29,12 @@ export const offersReducer = createReducer(initialState, (builder)=>{
     state.nearOffers = payload;
   }).addCase(setFavorites,(state,{payload})=> {
     state.favorites = payload;
+  }).addCase(changeStatusOfFavorite,(state,{payload})=> {
+    state.nearOffers.map((el)=>{
+      if(el.id === payload.id) {
+        el.isFavorite = !el.isFavorite;
+      }
+    });
   });
 });
 

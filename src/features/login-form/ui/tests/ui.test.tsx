@@ -4,8 +4,8 @@ import { withHistory } from '../../../../shared/providers';
 import { withStore } from '../../../../shared/providers/with-store';
 import LoginForm from '../ui';
 import { extractActionsTypes } from '../../../../shared/lib';
-import { API_ROUTES as USER_API_ROUTES } from '../../../../entities/user/model/config';
-import { API_ROUTES as OFFER_API_ROUTES } from '../../../../entities/offer/model/config';
+import { ApiRoutes as USER_ApiRoutes } from '../../../../entities/user/model/config';
+import { ApiRoutes as OFFER_ApiRoutes } from '../../../../entities/offer/model/config';
 import { login, redirectToRoute, setUser } from '../../../../entities/user/model/action';
 import { fetchFavorites, fetchOffers, setFavorites, setOffers, setOffersDataLoadingStatus } from '../../../../entities/offer/model/action';
 describe('Component: LoginForm', ()=>{
@@ -84,9 +84,9 @@ describe('Component: LoginForm', ()=>{
     const fakeServerReplay = { token: 'secret' };
 
     const {withStoreComponent, mockStore, mockAxiosAdapter} = withStore(<LoginForm/>,{});
-    mockAxiosAdapter.onPost(USER_API_ROUTES.LOGIN, {email: expectedEmailValue, password: expectedPassword}).reply(200,fakeServerReplay);
-    mockAxiosAdapter.onGet(OFFER_API_ROUTES.GET_OFFERS).reply(200);
-    mockAxiosAdapter.onGet(OFFER_API_ROUTES.GET_FAVORITES).reply(200);
+    mockAxiosAdapter.onPost(USER_ApiRoutes.LOGIN, {email: expectedEmailValue, password: expectedPassword}).reply(200,fakeServerReplay);
+    mockAxiosAdapter.onGet(OFFER_ApiRoutes.GET_OFFERS).reply(200);
+    mockAxiosAdapter.onGet(OFFER_ApiRoutes.GET_FAVORITES).reply(200);
     const componentWithProviders = withHistory(withStoreComponent);
 
     render(componentWithProviders);

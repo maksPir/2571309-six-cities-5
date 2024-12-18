@@ -15,3 +15,4 @@ export const paramsByBlockName = {
 
 export const MAX_IMAGES_COUNT = 6;
 export const MAX_NEAR_OFFERS_COUNT = 3;
+export const NUMBER_TO_MULTIPLY = 20;
